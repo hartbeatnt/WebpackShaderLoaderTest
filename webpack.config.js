@@ -18,7 +18,12 @@ module.exports = {
         include: DEV,
         loader: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.glsl$/,
+        loader: 'webpack-glsl-loader'
       }
     ]
   },
+  devtool: 'source-map'
 };

@@ -1,4 +1,8 @@
 var THREE = require('three')
+// Load shaders and texture
+var vert1 = require('../public/shaders/vertShader1.glsl')
+var frag1 = require('../public/shaders/fragShader1.glsl')
+var pinkBlack = THREE.TextureLoader('../public/pinkBlack.png')
 
 // ------------------------------------------------
 // BASIC SETUP
@@ -26,10 +30,19 @@ document.body.appendChild( renderer.domElement );
 // ------------------------------------------------
 // FUN STARTS HERE
 // ------------------------------------------------
-
+// set up shader variables
+var uniforms = {
+  time: { type: "f", value: 0 },
+  resolution: { type: "v2", value: new THREE.Vector2 },
+  texture: { type: "t", value: pinkBlack }  
+}
 // Create a Cube Mesh with basic material
 var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { color: "#433F81" } );
+var material = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vert1,
+    fragmentShader: frag1
+});
 var cube = new THREE.Mesh( geometry, material );
 
 // Add cube to Scene
@@ -38,9 +51,9 @@ scene.add( cube );
 // Render Loop
 var render = function () {
   requestAnimationFrame( render );
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+  uniforms.time.value += 0.1;
+  // cube.rotation.x += 0.01;
+  // cube.rotation.y += 0.01;
 
   // Render the scene
   renderer.render(scene, camera);
